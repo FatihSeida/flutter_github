@@ -1,0 +1,1 @@
+enum LoadMode { LazyLoading, WithIndex }
