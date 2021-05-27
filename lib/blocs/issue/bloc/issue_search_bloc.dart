@@ -36,7 +36,6 @@ class IssueSearchBloc extends Bloc<IssueSearchEvent, IssueSearchState> {
   @override
   Stream<IssueSearchState> mapEventToState(IssueSearchEvent event) async* {
     if (event is TextChanged) {
-      text = event.text;
       if (text.isEmpty) {
         yield SearchStateEmpty();
       } else {
