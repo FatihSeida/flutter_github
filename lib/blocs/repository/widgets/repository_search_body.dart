@@ -30,6 +30,25 @@ class _RepositorySearchBodyState extends State<RepositorySearchBody> {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_isBottom) {
+      _repositorySearchBloc.add((LoadMoreRepository(page: page)));
+    }
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    return currentScroll >= (maxScroll * 0.9);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<RepositorySearchBloc, RepositorySearchState>(
       builder: (context, state) {
@@ -148,24 +167,5 @@ class _RepositorySearchBodyState extends State<RepositorySearchBody> {
         }
       },
     );
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    if (_isBottom) {
-      _repositorySearchBloc.add((LoadMoreRepository(page: page)));
-    }
-  }
-
-  bool get _isBottom {
-    if (!_scrollController.hasClients) return false;
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.offset;
-    return currentScroll >= (maxScroll * 0.9);
   }
 }

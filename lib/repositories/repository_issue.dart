@@ -4,6 +4,8 @@ import 'package:sejutacita_flutter_github/cache/cache.dart';
 import 'package:sejutacita_flutter_github/clients/clients.dart';
 import 'package:sejutacita_flutter_github/models/models.dart';
 
+
+
 class IssueRepository {
   const IssueRepository({@required this.cache, @required this.client});
 

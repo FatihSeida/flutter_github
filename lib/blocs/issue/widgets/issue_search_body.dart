@@ -28,6 +28,25 @@ class _IssueSearchBodyState extends State<IssueSearchBody> {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_isBottom) {
+      _issueSearchBloc.add((LoadMoreIssue(page: page)));
+    }
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    return currentScroll >= (maxScroll * 0.9);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<IssueSearchBloc, IssueSearchState>(
       builder: (context, state) {
@@ -62,7 +81,7 @@ class _IssueSearchBodyState extends State<IssueSearchBody> {
                               item: state.items[index],
                             );
                           },
-                          itemCount: state.items.length,
+                          itemCount: state.items.length < 10 ? state.items.length : 10,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -143,24 +162,5 @@ class _IssueSearchBodyState extends State<IssueSearchBody> {
         }
       },
     );
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    if (_isBottom) {
-      _issueSearchBloc.add((LoadMoreIssue(page: page)));
-    }
-  }
-
-  bool get _isBottom {
-    if (!_scrollController.hasClients) return false;
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.offset;
-    return currentScroll >= (maxScroll * 0.9);
   }
 }
