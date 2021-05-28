@@ -11,14 +11,15 @@ part 'issue_search_event.dart';
 part 'issue_search_state.dart';
 
 class IssueSearchBloc extends Bloc<IssueSearchEvent, IssueSearchState> {
-  IssueSearchBloc({@required this.githubIssue}) : super(SearchStateEmpty());
+  IssueSearchBloc({@required this.issueRepository})
+      : super(const IssueSearchState());
 
-  final GithubIssue githubIssue;
-  List<IssueItem> _items = [];
-  int _currentLength;
-  bool _isLastPage;
-  int page = 1;
-  var text;
+  final IssueRepository issueRepository;
+
+  // List<IssueItem> _items = [];
+  // int _currentLength;
+  // bool _isLastPage;
+  // var text;
 
   @override
   Stream<Transition<IssueSearchEvent, IssueSearchState>> transformEvents(
@@ -35,48 +36,114 @@ class IssueSearchBloc extends Bloc<IssueSearchEvent, IssueSearchState> {
 
   @override
   Stream<IssueSearchState> mapEventToState(IssueSearchEvent event) async* {
-    if (event is TextChanged) {
-      if (text.isEmpty) {
-        yield SearchStateEmpty();
-      } else {
-        yield SearchStateLoading();
-        try {
-          final results = await githubIssue.issueSearch(text, page);
-          _items.addAll(results.items);
-          yield SearchStateSuccess(items: _items, count: 0);
-        } catch (error) {
-          yield error is SearchResultError
-              ? SearchStateError(error.message)
-              : SearchStateError('something went wrong');
-        }
+    if (event is SearchIssue) {
+      yield await _mapSearchIssueToState(state, event.text, event.page);
+    } else if (event is LoadMoreIssue) {
+      yield await _mapLoadMoreIssueToState(state);
+    } else if (event is ClearIssue) {
+      yield await _mapClearIssueToState(state);
+    } else if (event is NextPage) {
+      yield await _mapNextPageToState(state);
+    } else if (event is PreviousPage) {
+      yield await _mapPreviousPageToState(state);
+    }
+  }
+
+  Future<IssueSearchState> _mapSearchIssueToState(
+      IssueSearchState state, String searchTerm, int page) async {
+    try {
+      var results;
+      if (searchTerm.isNotEmpty) {
+        results = await issueRepository.issueSearch(searchTerm);
       }
-    } else if (event is LoadMore) {
-      if (state is SearchStateSuccess) {
-        _items = (state as SearchStateSuccess).items;
-        _currentLength = (state as SearchStateSuccess).count;
-        page++;
+      return results.items.isEmpty
+          ? state.copyWith(hasReachedMax: true, status: LoadStateStatus.failed)
+          : state.copyWith(
+              status: LoadStateStatus.success,
+              items: List.of(state.items)..addAll(results.items),
+              searchTerm: searchTerm,
+              hasReachedMax: false,
+              page: page,
+            );
+    } on Exception {
+      return state.copyWith(status: LoadStateStatus.error);
+    }
+  }
+
+  Future<IssueSearchState> _mapLoadMoreIssueToState(
+      IssueSearchState state) async {
+    try {
+      var results;
+      var page = state.page;
+      page++;
+      if (state.status == LoadStateStatus.success) {
+        results = await issueRepository.issueSearch(state.searchTerm, page);
       }
-      if (_currentLength == null || _isLastPage == null || !_isLastPage) {
-        yield SearchStateLoading();
-        try {
-          final results = await githubIssue.issueSearch(text, page);
-          if (results.isNotEmpty) {
-            _items.addAll(results.items);
-            if (_currentLength != null) {
-              _currentLength += results.items.length;
-            } else {
-              _currentLength = results.items.length;
-            }
-          } else {
-            _isLastPage = true;
-          }
-          yield SearchStateSuccess(items: _items, count: _currentLength);
-        } catch (error) {
-          yield error is SearchResultError
-              ? SearchStateError(error.message)
-              : SearchStateError('something went wrong');
-        }
+      return state.copyWith(
+        status: LoadStateStatus.success,
+        items: List.of(state.items)..addAll(results.items),
+        hasReachedMax: false,
+        page: page,
+        searchTerm: state.searchTerm,
+      );
+    } catch (error) {
+      return state.copyWith(status: LoadStateStatus.error);
+    }
+  }
+
+  Future<IssueSearchState> _mapClearIssueToState(IssueSearchState state) async {
+    return state.copyWith(
+        hasReachedMax: false,
+        items: List.of(state.items)..clear(),
+        searchTerm: '',
+        status: LoadStateStatus.empty);
+  }
+
+  Future<IssueSearchState> _mapNextPageToState(IssueSearchState state) async {
+    try {
+      var results;
+      var page = state.page;
+      page++;
+      if (state.status == LoadStateStatus.success) {
+        results = await issueRepository.issueSearch(state.searchTerm, page);
       }
+      return results.items.isEmpty
+          ? state.copyWith(
+              hasReachedMax: true,
+              status: LoadStateStatus.hasReachMax,
+              page: state.page,
+              items: state.items
+              )
+          : state.copyWith(
+              status: LoadStateStatus.success,
+              items: results.items,
+              page: page,
+              searchTerm: state.searchTerm,
+            );
+    } catch (error) {
+      return state.copyWith(status: LoadStateStatus.error);
+    }
+  }
+
+  Future<IssueSearchState> _mapPreviousPageToState(
+      IssueSearchState state) async {
+    try {
+      var results;
+      var page = state.page;
+      page--;
+      if (state.status == LoadStateStatus.success) {
+        results = await issueRepository.issueSearch(state.searchTerm, page);
+      }
+      return results.items.isEmpty
+          ? state.copyWith(hasReachedMax: true)
+          : state.copyWith(
+              status: LoadStateStatus.success,
+              items: results.items,
+              page: page,
+              searchTerm: state.searchTerm,
+            );
+    } catch (error) {
+      return state.copyWith(status: LoadStateStatus.error);
     }
   }
 }

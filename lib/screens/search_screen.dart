@@ -9,8 +9,8 @@ class SearchForm extends StatefulWidget {
 }
 
 class _SearchFormState extends State<SearchForm> {
-  var _mode = SearchMode.Issue;
-  var _loadMode = LoadMode.LazyLoading;
+  var _mode = SearchMode.issue;
+  var _loadMode = LoadMode.lazyLoading;
 
   void _handleRadioValueChange(var value) {
     setState(() {
@@ -20,14 +20,29 @@ class _SearchFormState extends State<SearchForm> {
 
   void _handleLoadModeValueChange(var value) {
     setState(() {
-      _mode = value;
+      _loadMode = value;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Github Search')),
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Image.asset(
+              'assets/images/logo.png',
+              fit: BoxFit.contain,
+              height: 32,
+            ),
+            Container(
+              padding: EdgeInsets.only(left: 8),
+              child: Text('Github Search'),
+            )
+          ],
+        ),
+      ),
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
@@ -37,7 +52,7 @@ class _SearchFormState extends State<SearchForm> {
               Row(
                 children: <Widget>[
                   Radio(
-                    value: SearchMode.Repository,
+                    value: SearchMode.repository,
                     groupValue: _mode,
                     onChanged: _handleRadioValueChange,
                   ),
@@ -46,7 +61,7 @@ class _SearchFormState extends State<SearchForm> {
                     style: TextStyle(fontSize: 16.0),
                   ),
                   Radio(
-                    value: SearchMode.Issue,
+                    value: SearchMode.issue,
                     groupValue: _mode,
                     onChanged: _handleRadioValueChange,
                   ),
@@ -57,7 +72,7 @@ class _SearchFormState extends State<SearchForm> {
                     ),
                   ),
                   Radio(
-                    value: SearchMode.User,
+                    value: SearchMode.user,
                     groupValue: _mode,
                     onChanged: _handleRadioValueChange,
                   ),
@@ -71,28 +86,30 @@ class _SearchFormState extends State<SearchForm> {
                 children: <Widget>[
                   InkWell(
                       splashColor: Colors.blueAccent,
-                      onTap: () => _handleLoadModeValueChange,
+                      onTap: () =>
+                          _handleLoadModeValueChange(LoadMode.lazyLoading),
                       child: RadioItem(
                         buttonText: 'Lazy Loading',
                         isSelected:
-                            _loadMode == LoadMode.LazyLoading ? true : false,
+                            _loadMode == LoadMode.lazyLoading ? true : false,
                       )),
                   InkWell(
                       splashColor: Colors.blueAccent,
-                      onTap: () => _handleLoadModeValueChange,
+                      onTap: () =>
+                          _handleLoadModeValueChange(LoadMode.withIndex),
                       child: RadioItem(
                         buttonText: 'With Index',
                         isSelected:
-                            _loadMode == LoadMode.WithIndex ? true : false,
+                            _loadMode == LoadMode.withIndex ? true : false,
                       )),
                 ],
               ),
             ],
           ),
           Expanded(
-            child: _mode == SearchMode.Issue
+            child: _mode == SearchMode.issue
                 ? IssueSearchBody(mode: _loadMode)
-                : _mode == SearchMode.Repository
+                : _mode == SearchMode.repository
                     ? RepositorySearchBody(mode: _loadMode)
                     : UserSearchBody(mode: _loadMode),
           )

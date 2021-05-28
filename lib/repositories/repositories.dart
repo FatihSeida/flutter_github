@@ -1,3 +1,3 @@
-export 'github_repository.dart';
-export 'github_issue.dart';
-export 'github_user.dart';
+export 'repository_of_repository.dart';
+export 'repository_issue.dart';
+export 'repository_user.dart';

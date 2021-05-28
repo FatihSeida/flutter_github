@@ -15,27 +15,27 @@ void main() {
 }
 
 class App extends StatelessWidget {
-  // final GithubRepository githubRepository;
-  // final GithubIssue githubIssue;
-  // final GithubUser githubUser;
+  // final RepositoryOfRepository githubRepository;
+  // final IssueRepository issueRepository;
+  // final UserRepository githubUser;
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider<GithubRepository>(
-          create: (_) => GithubRepository(
+        RepositoryProvider<RepositoryOfRepository>(
+          create: (_) => RepositoryOfRepository(
             cache: RepositoryCache(),
             client: GithubClient(),
           ),
         ),
-        RepositoryProvider<GithubIssue>(
-          create: (_) => GithubIssue(
+        RepositoryProvider<IssueRepository>(
+          create: (_) => IssueRepository(
             cache: IssueCache(),
             client: GithubClient(),
           ),
         ),
-        RepositoryProvider<GithubUser>(
-          create: (_) => GithubUser(
+        RepositoryProvider<UserRepository>(
+          create: (_) => UserRepository(
             cache: UserCache(),
             client: GithubClient(),
           ),
@@ -45,19 +45,20 @@ class App extends StatelessWidget {
         providers: [
           BlocProvider<RepositorySearchBloc>(
             create: (BuildContext context) => RepositorySearchBloc(
-                githubRepository: context.read<GithubRepository>()),
+                repositoryOfRepository: context.read<RepositoryOfRepository>()),
           ),
           BlocProvider<IssueSearchBloc>(
-            create: (BuildContext context) =>
-                IssueSearchBloc(githubIssue: context.read<GithubIssue>()),
+            create: (BuildContext context) => IssueSearchBloc(
+                issueRepository: context.read<IssueRepository>()),
           ),
           BlocProvider<UserSearchBloc>(
             create: (BuildContext context) =>
-                UserSearchBloc(githubUser: context.read<GithubUser>()),
+                UserSearchBloc(userRepository: context.read<UserRepository>()),
           ),
         ],
         child: MaterialApp(
           title: 'Github Search',
+          theme: ThemeData(fontFamily: 'SourceSansPro'),
           home: SearchForm(),
         ),
       ),

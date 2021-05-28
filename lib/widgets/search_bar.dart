@@ -25,29 +25,29 @@ class _SearchBarState extends State<SearchBar> {
   user.UserSearchBloc _userSearchBloc;
 
   void _submit(String text) {
-    if (widget.mode == SearchMode.Repository) {
+    if (widget.mode == SearchMode.repository) {
       _repositorySearchBloc.add(
-        repository.TextChanged(text: text),
+        repository.SearchRepository(text: text, page: 1),
       );
-    } else if (widget.mode == SearchMode.Issue) {
+    } else if (widget.mode == SearchMode.issue) {
       _issueSearchBloc.add(
-        issue.TextChanged(text: text),
+        issue.SearchIssue(text: text, page: 1),
       );
-    } else if (widget.mode == SearchMode.User) {
+    } else if (widget.mode == SearchMode.user) {
       _userSearchBloc.add(
-        user.TextChanged(text: text),
+        user.SearchUser(text: text, page: 1),
       );
     }
   }
 
   void _onClearTapped() {
     _textController.text = '';
-    if (widget.mode == SearchMode.Repository) {
-      _repositorySearchBloc.add(const repository.TextChanged(text: ''));
-    } else if (widget.mode == SearchMode.Issue) {
-      _issueSearchBloc.add(const issue.TextChanged(text: ''));
-    } else if (widget.mode == SearchMode.User) {
-      _userSearchBloc.add(const user.TextChanged(text: ''));
+    if (widget.mode == SearchMode.repository) {
+      _repositorySearchBloc.add(repository.ClearRepository());
+    } else if (widget.mode == SearchMode.issue) {
+      _issueSearchBloc.add(issue.ClearIssue());
+    } else if (widget.mode == SearchMode.user) {
+      _userSearchBloc.add(user.ClearUser());
     }
   }
 
