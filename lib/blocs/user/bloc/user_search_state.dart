@@ -1,33 +1,43 @@
 part of 'user_search_bloc.dart';
 
-abstract class UserSearchState extends Equatable {
-  const UserSearchState();
+enum LoadStateStatus { empty, loading, loadMore, success, error, failed }
 
-  @override
-  List<Object> get props => [];
-}
+class UserSearchState extends Equatable {
+  const UserSearchState({
+    this.status = LoadStateStatus.empty,
+    this.items = const <User>[],
+    this.hasReachedMax = false,
+    this.searchTerm,
+    this.page,
+  });
 
-class SearchStateEmpty extends UserSearchState {}
-
-class SearchStateLoading extends UserSearchState {}
-
-class SearchStateSuccess extends UserSearchState {
-  const SearchStateSuccess(this.items);
-
+  final String searchTerm;
+  final LoadStateStatus status;
   final List<User> items;
+  final bool hasReachedMax;
+  final int page;
+
+  UserSearchState copyWith({
+    LoadStateStatus status,
+    List<User> items,
+    bool hasReachedMax,
+    String searchTerm,
+    int page,
+  }) {
+    return UserSearchState(
+      hasReachedMax: hasReachedMax,
+      items: items,
+      status: status,
+      searchTerm: searchTerm,
+      page: page,
+    );
+  }
 
   @override
-  List<Object> get props => [items];
+  String toString() {
+    return 'UserSearchState { status: $status, hasReachedMax: $hasReachedMax, items: ${items.length}, searchTerm: $searchTerm, page: $page }';
+  }
 
   @override
-  String toString() => 'SearchStateSuccess { items: ${items.length} }';
-}
-
-class SearchStateError extends UserSearchState {
-  const SearchStateError(this.error);
-
-  final String error;
-
-  @override
-  List<Object> get props => [error];
+  List<Object> get props => [hasReachedMax, items, status, searchTerm, page];
 }

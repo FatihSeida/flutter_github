@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:sejutacita_flutter_github/enums/enums.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:sejutacita_flutter_github/blocs/repository/bloc/repository_search_bloc.dart'
+import '../cubits/cubit/navigation_cubit.dart';
+import '../enums/enums.dart';
+import '../blocs/repository/bloc/repository_search_bloc.dart'
     as repository;
-import 'package:sejutacita_flutter_github/blocs/issue/bloc/issue_search_bloc.dart'
+import '../blocs/issue/bloc/issue_search_bloc.dart'
     as issue;
-import 'package:sejutacita_flutter_github/blocs/user/bloc/user_search_bloc.dart'
+import '../blocs/user/bloc/user_search_bloc.dart'
     as user;
 
 class SearchBar extends StatefulWidget {
-  const SearchBar({@required this.mode});
+  final NavigationState state;
 
-  final SearchMode mode;
+  const SearchBar({this.state});
 
   @override
   State<SearchBar> createState() => _SearchBarState();
@@ -25,29 +26,24 @@ class _SearchBarState extends State<SearchBar> {
   user.UserSearchBloc _userSearchBloc;
 
   void _submit(String text) {
-    if (widget.mode == SearchMode.Repository) {
-      _repositorySearchBloc.add(
-        repository.TextChanged(text: text),
-      );
-    } else if (widget.mode == SearchMode.Issue) {
-      _issueSearchBloc.add(
-        issue.TextChanged(text: text),
-      );
-    } else if (widget.mode == SearchMode.User) {
-      _userSearchBloc.add(
-        user.TextChanged(text: text),
-      );
+    if (widget.state.searchMode == SearchMode.repository) {
+      _repositorySearchBloc
+          .add(repository.SearchRepository(text: text, page: 1));
+    } else if ((widget.state.searchMode == SearchMode.issue)) {
+      _issueSearchBloc.add(issue.SearchIssue(text: text, page: 1));
+    } else if ((widget.state.searchMode == SearchMode.user)) {
+      _userSearchBloc.add(user.SearchUser(text: text, page: 1));
     }
   }
 
   void _onClearTapped() {
     _textController.text = '';
-    if (widget.mode == SearchMode.Repository) {
-      _repositorySearchBloc.add(const repository.TextChanged(text: ''));
-    } else if (widget.mode == SearchMode.Issue) {
-      _issueSearchBloc.add(const issue.TextChanged(text: ''));
-    } else if (widget.mode == SearchMode.User) {
-      _userSearchBloc.add(const user.TextChanged(text: ''));
+    if (widget.state.searchMode == SearchMode.repository) {
+      _repositorySearchBloc.add(repository.ClearRepository());
+    } else if ((widget.state.searchMode == SearchMode.issue)) {
+      _issueSearchBloc.add(issue.ClearIssue());
+    } else if ((widget.state.searchMode == SearchMode.user)) {
+      _userSearchBloc.add(user.ClearUser());
     }
   }
 

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:sejutacita_flutter_github/models/models.dart';
+import '../models/models.dart';
 
 class GithubClient {
   GithubClient({
@@ -13,9 +13,9 @@ class GithubClient {
   final String baseUrl;
   final http.Client httpClient;
 
-  Future<Repositories> repositorySearch(String term) async {
-    final response =
-        await httpClient.get(Uri.parse("$baseUrl/repositories?q=$term"));
+  Future<Repositories> repositorySearch(String term, int page) async {
+    final response = await httpClient
+        .get(Uri.parse("$baseUrl/repositories?q=$term&per_page=10&page=$page"));
     final results = json.decode(response.body.toString());
     print(results);
     if (response.statusCode == 200) {
@@ -27,8 +27,8 @@ class GithubClient {
   }
 
   Future<Issues> issueSearch(String term, int page) async {
-    final response = await httpClient
-        .get(Uri.parse("$baseUrl/issues?q=$term&per_page=10&page=$page"));
+    final url = Uri.parse("$baseUrl/issues?q=$term&per_page=10&page=$page");
+    final response = await httpClient.get(url);
     final results = json.decode(response.body.toString());
     print(results);
     if (response.statusCode == 200) {
@@ -38,8 +38,9 @@ class GithubClient {
     }
   }
 
-  Future<Users> userSearch(String term) async {
-    final response = await httpClient.get(Uri.parse("$baseUrl/users?q=$term"));
+  Future<Users> userSearch(String term, int page) async {
+    final response = await httpClient
+        .get(Uri.parse("$baseUrl/users?q=$term&per_page=10&page=$page"));
     final results = json.decode(response.body.toString());
     print(results);
     if (response.statusCode == 200) {

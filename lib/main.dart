@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sejutacita_flutter_github/cache/cache.dart';
-import 'package:sejutacita_flutter_github/blocs/issue/bloc/issue_search_bloc.dart';
-import 'package:sejutacita_flutter_github/blocs/repository/bloc/repository_search_bloc.dart';
-import 'package:sejutacita_flutter_github/blocs/user/bloc/user_search_bloc.dart';
-import 'package:sejutacita_flutter_github/screens/search_screen.dart';
+
+import '../cache/cache.dart';
+import '../blocs/issue/bloc/issue_search_bloc.dart';
+import '../blocs/repository/bloc/repository_search_bloc.dart';
+import '../blocs/user/bloc/user_search_bloc.dart';
+import '../cubits/cubit/navigation_cubit.dart';
+import '../screens/search_screen.dart';
 
 import 'cache/repository_cache.dart';
 import 'clients/clients.dart';
@@ -15,27 +17,27 @@ void main() {
 }
 
 class App extends StatelessWidget {
-  // final GithubRepository githubRepository;
-  // final GithubIssue githubIssue;
-  // final GithubUser githubUser;
+  // final RepositoryOfRepository githubRepository;
+  // final IssueRepository issueRepository;
+  // final UserRepository githubUser;
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider<GithubRepository>(
-          create: (_) => GithubRepository(
+        RepositoryProvider<RepositoryOfRepository>(
+          create: (_) => RepositoryOfRepository(
             cache: RepositoryCache(),
             client: GithubClient(),
           ),
         ),
-        RepositoryProvider<GithubIssue>(
-          create: (_) => GithubIssue(
+        RepositoryProvider<IssueRepository>(
+          create: (_) => IssueRepository(
             cache: IssueCache(),
             client: GithubClient(),
           ),
         ),
-        RepositoryProvider<GithubUser>(
-          create: (_) => GithubUser(
+        RepositoryProvider<UserRepository>(
+          create: (_) => UserRepository(
             cache: UserCache(),
             client: GithubClient(),
           ),
@@ -45,19 +47,22 @@ class App extends StatelessWidget {
         providers: [
           BlocProvider<RepositorySearchBloc>(
             create: (BuildContext context) => RepositorySearchBloc(
-                githubRepository: context.read<GithubRepository>()),
+                repositoryOfRepository: context.read<RepositoryOfRepository>()),
           ),
           BlocProvider<IssueSearchBloc>(
-            create: (BuildContext context) =>
-                IssueSearchBloc(githubIssue: context.read<GithubIssue>()),
+            create: (BuildContext context) => IssueSearchBloc(
+                issueRepository: context.read<IssueRepository>()),
           ),
           BlocProvider<UserSearchBloc>(
             create: (BuildContext context) =>
-                UserSearchBloc(githubUser: context.read<GithubUser>()),
+                UserSearchBloc(userRepository: context.read<UserRepository>()),
           ),
+          BlocProvider<NavigationCubit>(
+              create: (BuildContext context) => NavigationCubit()),
         ],
         child: MaterialApp(
           title: 'Github Search',
+          theme: ThemeData(fontFamily: 'SourceSansPro'),
           home: SearchForm(),
         ),
       ),

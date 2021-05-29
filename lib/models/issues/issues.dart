@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import '../user.dart';
+import '/models/models.dart';
 
 part 'issueItem.dart';
 

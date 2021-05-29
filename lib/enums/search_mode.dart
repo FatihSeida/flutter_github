@@ -1,1 +1,1 @@
-enum SearchMode { Repository, Issue, User }
+enum SearchMode { repository, issue, user }

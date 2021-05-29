@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:sejutacita_flutter_github/models/user.dart';
+import '/models/user.dart';
 
 part 'repositoryItem.dart';
 

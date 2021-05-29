@@ -7,18 +7,33 @@ abstract class IssueSearchEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class TextChanged extends IssueSearchEvent {
-  const TextChanged({@required this.text});
+class SearchIssue extends IssueSearchEvent {
+  const SearchIssue({@required this.text, @required this.page});
 
   final String text;
+  final int page;
 
   @override
-  List<Object> get props => [text];
+  List<Object> get props => [text, page];
 
   @override
-  String toString() => 'TextChanged { text: $text }';
+  String toString() => 'SearchIssue {text: $text, page: $page}';
 }
 
-class Load extends IssueSearchEvent {}
+class LoadMoreIssue extends IssueSearchEvent {
+  const LoadMoreIssue({@required this.page});
 
-class LoadMore extends IssueSearchEvent {}
+  final int page;
+
+  @override
+  List<Object> get props => [page];
+
+  @override
+  String toString() => 'LoadMoreIssue { page: $page }';
+}
+
+class ClearIssue extends IssueSearchEvent {}
+
+class NextPage extends IssueSearchEvent {}
+
+class PreviousPage extends IssueSearchEvent {}

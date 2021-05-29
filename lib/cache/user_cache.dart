@@ -1,4 +1,4 @@
-import 'package:sejutacita_flutter_github/models/models.dart';
+import '/models/models.dart';
 
 class UserCache {
   final _cache = <String, Users>{};
@@ -10,4 +10,6 @@ class UserCache {
   bool contains(String term) => _cache.containsKey(term);
 
   void remove(String term) => _cache.remove(term);
+
+  void removeAll() => _cache.clear();
 }
