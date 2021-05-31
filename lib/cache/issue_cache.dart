@@ -3,7 +3,7 @@ import '/models/models.dart';
 class IssueCache {
   final _cache = <String, Issues>{};
 
-  Issues get(String term) => _cache[term];
+  Issues? get(String term) => _cache[term];
 
   void set(String term, Issues result) => _cache[term] = result;
 

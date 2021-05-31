@@ -7,7 +7,7 @@ import '../enums/enums.dart';
 class SearchModeWidget extends StatefulWidget {
   final NavigationState state;
 
-  const SearchModeWidget({Key key, this.state}) : super(key: key);
+  const SearchModeWidget({required this.state});
   @override
   _SearchModeWidgetState createState() => _SearchModeWidgetState();
 }

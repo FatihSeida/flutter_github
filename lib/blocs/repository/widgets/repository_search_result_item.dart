@@ -1,8 +1,7 @@
 part of 'repository_search_body.dart';
 
 class RepositorySearchResultItem extends StatelessWidget {
-  const RepositorySearchResultItem({Key key, @required this.item})
-      : super(key: key);
+  const RepositorySearchResultItem({required this.item});
 
   final RepositoryItem item;
 
@@ -28,10 +27,9 @@ class RepositorySearchResultItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  AutoSizeText(
+                  Text(
                     '${item.name}',
                     maxLines: 2,
-                    minFontSize: 16,
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold),
                   ),

@@ -3,7 +3,7 @@ import '/models/models.dart';
 class RepositoryCache {
   final _cache = <String, Repositories>{};
 
-  Repositories get(String term) => _cache[term];
+  Repositories? get(String term) => _cache[term];
 
   void set(String term, Repositories result) => _cache[term] = result;
 

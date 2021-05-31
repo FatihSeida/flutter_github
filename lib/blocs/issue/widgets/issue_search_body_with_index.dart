@@ -3,14 +3,14 @@ part of 'issue_search_body.dart';
 class IssueSearchBodyWithIndex extends StatefulWidget {
   final IssueSearchState state;
 
-  const IssueSearchBodyWithIndex({Key key, this.state}) : super(key: key);
+  const IssueSearchBodyWithIndex({required this.state});
   @override
   _IssueSearchBodyWithIndexState createState() =>
       _IssueSearchBodyWithIndexState();
 }
 
 class _IssueSearchBodyWithIndexState extends State<IssueSearchBodyWithIndex> {
-  IssueSearchBloc _issueSearchBloc;
+  late IssueSearchBloc _issueSearchBloc;
 
   @override
   void initState() {
@@ -30,11 +30,11 @@ class _IssueSearchBodyWithIndexState extends State<IssueSearchBodyWithIndex> {
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (BuildContext context, int index) {
               return IssueSearchResultItem(
-                item: widget.state.items[index],
+                item: widget.state.items![index],
               );
             },
             itemCount:
-                widget.state.items.length < 10 ? widget.state.items.length : 10,
+                widget.state.items!.length < 10 ? widget.state.items!.length : 10,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

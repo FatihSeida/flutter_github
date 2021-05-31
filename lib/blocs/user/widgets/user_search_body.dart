@@ -14,7 +14,7 @@ part 'user_search_result_item.dart';
 class UserSearchBody extends StatefulWidget {
   final NavigationState state;
 
-  UserSearchBody({Key key, @required this.state}) : super(key: key);
+  UserSearchBody({required this.state});
   @override
   _UserSearchBodyState createState() => _UserSearchBodyState();
 }
@@ -34,7 +34,7 @@ class _UserSearchBodyState extends State<UserSearchBody> {
                 ? UserSearchBodyLazyLoading(state: state)
                 : UserSearchBodyWithIndex(state: state);
           default:
-            if (state.items.isEmpty) {
+            if (state.items!.isEmpty) {
               return Text('Please enter term to begin');
             }
             return const Center(child: CircularProgressIndicator());

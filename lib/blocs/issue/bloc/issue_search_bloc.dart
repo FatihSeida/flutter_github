@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'package:meta/meta.dart';
+
 import 'package:bloc/bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:equatable/equatable.dart';
-
 import '/repositories/repositories.dart';
 import '/models/models.dart';
 
@@ -11,8 +10,8 @@ part 'issue_search_event.dart';
 part 'issue_search_state.dart';
 
 class IssueSearchBloc extends Bloc<IssueSearchEvent, IssueSearchState> {
-  IssueSearchBloc({@required this.issueRepository})
-      : super(const IssueSearchState());
+  IssueSearchBloc({required this.issueRepository})
+      : super(const IssueSearchState(searchTerm: "", page: 1,));
 
   final IssueRepository issueRepository;
 
@@ -51,40 +50,39 @@ class IssueSearchBloc extends Bloc<IssueSearchEvent, IssueSearchState> {
       if (searchTerm.isNotEmpty && searchTerm != "") {
         results = await issueRepository.issueSearch(searchTerm);
       } else {
-        return state.copyWith(status: LoadStateStatus.empty, items: []);
+        return state.copyWith(status: LoadStateStatus.empty, items: [], searchTerm: "",page: 1,);
       }
       return results.items.isEmpty
-          ? state.copyWith(hasReachedMax: true, status: LoadStateStatus.failed)
+          ? state.copyWith(hasReachedMax: true, status: LoadStateStatus.failed, items: [], page: 1, searchTerm: '')
           : state.copyWith(
               status: LoadStateStatus.success,
-              items: List.of(state.items)..addAll(results.items),
+              items: List.of(state.items!)..addAll(results.items),
               searchTerm: searchTerm,
               hasReachedMax: false,
               page: page,
             );
     } on Exception {
-      return state.copyWith(status: LoadStateStatus.error);
+      return state.copyWith(status: LoadStateStatus.error, page: 1);
     }
   }
 
-  Future<IssueSearchState> _mapLoadMoreIssueToState(
-      IssueSearchState state) async {
+  Future<IssueSearchState> _mapLoadMoreIssueToState(IssueSearchState state) async {
     try {
       var results;
       var page = state.page;
       page++;
       if (state.status == LoadStateStatus.success) {
-        results = await issueRepository.issueSearch(state.searchTerm, page);
+        results = await issueRepository.issueSearch(state.searchTerm!, page);
       }
       return state.copyWith(
         status: LoadStateStatus.success,
-        items: List.of(state.items)..addAll(results.items),
+        items: List.of(state.items!)..addAll(results.items),
         hasReachedMax: false,
         page: page,
         searchTerm: state.searchTerm,
       );
     } catch (error) {
-      return state.copyWith(status: LoadStateStatus.error);
+      return state.copyWith(status: LoadStateStatus.error, page: 1);
     }
   }
 
@@ -104,7 +102,7 @@ class IssueSearchBloc extends Bloc<IssueSearchEvent, IssueSearchState> {
       var page = state.page;
       page++;
       if (state.status == LoadStateStatus.success) {
-        results = await issueRepository.issueSearch(state.searchTerm, page);
+        results = await issueRepository.issueSearch(state.searchTerm!, page);
       }
       return results.items.isEmpty
           ? state.copyWith(
@@ -121,12 +119,11 @@ class IssueSearchBloc extends Bloc<IssueSearchEvent, IssueSearchState> {
               searchTerm: state.searchTerm,
               hasReachedMax: true);
     } catch (error) {
-      return state.copyWith(status: LoadStateStatus.error);
+      return state.copyWith(status: LoadStateStatus.error, page: 1);
     }
   }
 
-  Future<IssueSearchState> _mapPreviousPageToState(
-      IssueSearchState state) async {
+  Future<IssueSearchState> _mapPreviousPageToState(IssueSearchState state) async {
     try {
       var results;
       var page = state.page;
@@ -141,7 +138,7 @@ class IssueSearchBloc extends Bloc<IssueSearchEvent, IssueSearchState> {
       }
       if (state.status == LoadStateStatus.success && page > 1) {
         page--;
-        results = await issueRepository.issueSearch(state.searchTerm, page);
+        results = await issueRepository.issueSearch(state.searchTerm!, page);
       }
       return results.items.isEmpty
           ? state.copyWith(
@@ -158,7 +155,7 @@ class IssueSearchBloc extends Bloc<IssueSearchEvent, IssueSearchState> {
               searchTerm: state.searchTerm,
               hasReachedMax: true);
     } catch (error) {
-      return state.copyWith(status: LoadStateStatus.error);
+      return state.copyWith(status: LoadStateStatus.error, items: [], page: 1, searchTerm: '');
     }
   }
 }

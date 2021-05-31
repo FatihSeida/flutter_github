@@ -1,14 +1,14 @@
 part of 'navigation_cubit.dart';
 
 class NavigationState extends Equatable {
-  const NavigationState({this.searchMode, this.loadMode});
+  const NavigationState({required this.searchMode, required this.loadMode});
 
   final SearchMode searchMode;
   final LoadMode loadMode;
 
   NavigationState copyWith({
-    SearchMode searchMode,
-    LoadMode loadMode,
+    required SearchMode searchMode,
+    required LoadMode loadMode,
   }) {
     return NavigationState(
       loadMode: loadMode,

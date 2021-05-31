@@ -1,7 +1,7 @@
 part of 'user_search_body.dart';
 
 class UserSearchResultItem extends StatelessWidget {
-  const UserSearchResultItem({Key key, @required this.item}) : super(key: key);
+  const UserSearchResultItem({required this.item});
 
   final User item;
 

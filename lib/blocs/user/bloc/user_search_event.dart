@@ -8,7 +8,7 @@ abstract class UserSearchEvent extends Equatable {
 }
 
 class SearchUser extends UserSearchEvent {
-  const SearchUser({@required this.text, @required this.page});
+  const SearchUser({required this.text, required this.page});
 
   final String text;
   final int page;
@@ -21,7 +21,7 @@ class SearchUser extends UserSearchEvent {
 }
 
 class LoadMoreUser extends UserSearchEvent {
-  const LoadMoreUser({@required this.page});
+  const LoadMoreUser({required this.page});
 
   final int page;
 

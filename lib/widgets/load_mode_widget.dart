@@ -8,7 +8,7 @@ import '../widgets/widgets.dart';
 class LoadModeWidget extends StatefulWidget {
   final NavigationState state;
 
-  LoadModeWidget({Key key, this.state}) : super(key: key);
+  LoadModeWidget({required this.state});
 
   @override
   _LoadModeWidgetState createState() => _LoadModeWidgetState();

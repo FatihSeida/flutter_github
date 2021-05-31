@@ -1,7 +1,5 @@
-import 'package:meta/meta.dart';
-
 class SearchResultError {
-  const SearchResultError({@required this.message});
+  const SearchResultError({required this.message});
 
   final String message;
 

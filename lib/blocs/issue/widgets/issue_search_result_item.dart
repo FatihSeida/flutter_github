@@ -1,7 +1,7 @@
 part of 'issue_search_body.dart';
 
 class IssueSearchResultItem extends StatelessWidget {
-  const IssueSearchResultItem({@required this.item});
+  const IssueSearchResultItem({required this.item});
 
   final IssueItem item;
 
@@ -27,10 +27,9 @@ class IssueSearchResultItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  AutoSizeText(
+                  Text(
                     '${item.title}',
                     maxLines: 2,
-                    minFontSize: 16,
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold),
                   ),

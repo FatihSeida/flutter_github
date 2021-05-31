@@ -2,13 +2,13 @@ part of 'repositories.dart';
 
 class RepositoryItem {
   RepositoryItem({
-    this.name,
-    this.owner,
-    this.htmlUrl,
-    this.createdAt,
-    this.stargazersCount,
-    this.watchersCount,
-    this.forksCount,
+    required this.name,
+    required this.owner,
+    required this.htmlUrl,
+    required this.createdAt,
+    required this.stargazersCount,
+    required this.watchersCount,
+    required this.forksCount,
   });
 
   String name;
@@ -26,11 +26,9 @@ class RepositoryItem {
 
   factory RepositoryItem.fromMap(Map<String, dynamic> json) => RepositoryItem(
         name: json["full_name"] == null ? null : json["full_name"],
-        owner: json["owner"] == null ? null : User.fromMap(json["owner"]),
+        owner: User.fromMap(json["owner"]),
         htmlUrl: json["html_url"] == null ? null : json["html_url"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
+        createdAt: DateTime.parse(json["created_at"]),
         stargazersCount:
             json["stargazers_count"] == null ? null : json["stargazers_count"],
         watchersCount:
@@ -39,12 +37,12 @@ class RepositoryItem {
       );
 
   Map<String, dynamic> toMap() => {
-        "full_name": name == null ? null : name,
-        "owner": owner == null ? null : owner.toMap(),
-        "html_url": htmlUrl == null ? null : htmlUrl,
-        "created_at": createdAt == null ? null : createdAt.toIso8601String(),
-        "stargazers_count": stargazersCount == null ? null : stargazersCount,
-        "watchers_count": watchersCount == null ? null : watchersCount,
-        "forks_count": forksCount == null ? null : forksCount,
+        "full_name": name,
+        "owner": owner.toMap(),
+        "html_url": htmlUrl,
+        "created_at": createdAt.toIso8601String(),
+        "stargazers_count": stargazersCount,
+        "watchers_count":watchersCount,
+        "forks_count": forksCount,
       };
 }

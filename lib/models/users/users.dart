@@ -4,9 +4,9 @@ import '/models/user.dart';
 
 class Users {
   Users({
-    this.totalCount,
-    this.incompleteResults,
-    this.items,
+    required this.totalCount,
+    required this.incompleteResults,
+    required this.items,
   });
 
   int totalCount;
@@ -14,14 +14,14 @@ class Users {
   List<User> items;
 
   Users copyWith({
-    int totalCount,
-    bool incompleteResults,
-    List<User> items,
+    required int totalCount,
+    required bool incompleteResults,
+    required List<User> items,
   }) =>
       Users(
-        totalCount: totalCount ?? this.totalCount,
-        incompleteResults: incompleteResults ?? this.incompleteResults,
-        items: items ?? this.items,
+        totalCount: totalCount,
+        incompleteResults: incompleteResults,
+        items: items,
       );
 
   factory Users.fromJson(String str) => Users.fromMap(json.decode(str));
@@ -29,21 +29,14 @@ class Users {
   String toJson() => json.encode(toMap());
 
   factory Users.fromMap(Map<String, dynamic> json) => Users(
-        totalCount: json["total_count"] == null ? null : json["total_count"],
-        incompleteResults: json["incomplete_results"] == null
-            ? null
-            : json["incomplete_results"],
-        items: json["items"] == null
-            ? null
-            : List<User>.from(json["items"].map((x) => User.fromMap(x))),
+        totalCount: json["total_count"],
+        incompleteResults: json["incomplete_results"],
+        items: List<User>.from(json["items"].map((x) => User.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
-        "total_count": totalCount == null ? null : totalCount,
-        "incomplete_results":
-            incompleteResults == null ? null : incompleteResults,
-        "items": items == null
-            ? null
-            : List<dynamic>.from(items.map((x) => x.toMap())),
+        "total_count": totalCount,
+        "incomplete_results": incompleteResults,
+        "items": List<dynamic>.from(items.map((x) => x.toMap())),
       };
 }

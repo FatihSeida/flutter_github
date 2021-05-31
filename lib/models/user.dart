@@ -2,9 +2,9 @@ import 'dart:convert';
 
 class User {
   User({
-    this.login,
-    this.avatarUrl,
-    this.url,
+    required this.login,
+    required this.avatarUrl,
+    required this.url,
   });
 
   String login;
@@ -22,8 +22,8 @@ class User {
       );
 
   Map<String, dynamic> toMap() => {
-        "login": login == null ? null : login,
-        "avatar_url": avatarUrl == null ? null : avatarUrl,
-        "url": url == null ? null : url,
+        "login": login,
+        "avatar_url": avatarUrl,
+        "url": url,
       };
 }

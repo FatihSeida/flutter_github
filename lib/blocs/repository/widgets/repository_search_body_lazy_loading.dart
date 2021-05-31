@@ -2,7 +2,7 @@ part of 'repository_search_body.dart';
 
 class RepositorySearchBodyLazyLoading extends StatefulWidget {
   final RepositorySearchState state;
-  RepositorySearchBodyLazyLoading({Key key, this.state}) : super(key: key);
+  RepositorySearchBodyLazyLoading({required this.state});
 
   @override
   _RepositorySearchBodyLazyLoadingState createState() =>
@@ -12,7 +12,7 @@ class RepositorySearchBodyLazyLoading extends StatefulWidget {
 class _RepositorySearchBodyLazyLoadingState
     extends State<RepositorySearchBodyLazyLoading> {
   final _scrollController = ScrollController();
-  RepositorySearchBloc _repositorySearchBloc;
+  late RepositorySearchBloc _repositorySearchBloc;
   int _page = 1;
 
   @override
@@ -45,13 +45,13 @@ class _RepositorySearchBodyLazyLoadingState
   Widget build(BuildContext context) {
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
-        return index >= widget.state.items.length
+        return index >= widget.state.items!.length
             ? BottomLoader()
-            : RepositorySearchResultItem(item: widget.state.items[index]);
+            : RepositorySearchResultItem(item: widget.state.items![index]);
       },
-      itemCount: widget.state.hasReachedMax
-          ? widget.state.items.length
-          : widget.state.items.length + 1,
+      itemCount: widget.state.hasReachedMax!
+          ? widget.state.items!.length
+          : widget.state.items!.length + 1,
       controller: _scrollController,
     );
   }

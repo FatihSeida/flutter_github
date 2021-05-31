@@ -8,7 +8,7 @@ abstract class IssueSearchEvent extends Equatable {
 }
 
 class SearchIssue extends IssueSearchEvent {
-  const SearchIssue({@required this.text, @required this.page});
+  const SearchIssue({required this.text, required this.page});
 
   final String text;
   final int page;
@@ -21,7 +21,7 @@ class SearchIssue extends IssueSearchEvent {
 }
 
 class LoadMoreIssue extends IssueSearchEvent {
-  const LoadMoreIssue({@required this.page});
+  const LoadMoreIssue({required this.page});
 
   final int page;
 

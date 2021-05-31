@@ -5,8 +5,8 @@ class RadioItem extends StatelessWidget {
   final String buttonText;
 
   RadioItem({
-    @required this.isSelected,
-    @required this.buttonText,
+    required this.isSelected,
+    required this.buttonText,
   });
 
   @override

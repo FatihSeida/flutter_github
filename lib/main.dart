@@ -8,18 +8,17 @@ import '../blocs/user/bloc/user_search_bloc.dart';
 import '../cubits/cubit/navigation_cubit.dart';
 import '../screens/search_screen.dart';
 
+import 'blocs/simple_bloc_observer.dart';
 import 'cache/repository_cache.dart';
 import 'clients/clients.dart';
 import 'repositories/repositories.dart';
 
 void main() {
+  Bloc.observer = SimpleBlocObserver();
   runApp(App());
 }
 
 class App extends StatelessWidget {
-  // final RepositoryOfRepository githubRepository;
-  // final IssueRepository issueRepository;
-  // final UserRepository githubUser;
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:equatable/equatable.dart';
@@ -11,8 +10,8 @@ part 'user_search_event.dart';
 part 'user_search_state.dart';
 
 class UserSearchBloc extends Bloc<UserSearchEvent, UserSearchState> {
-  UserSearchBloc({@required this.userRepository})
-      : super(const UserSearchState());
+  UserSearchBloc({required this.userRepository})
+      : super(const UserSearchState(searchTerm: "", page: 1,));
 
   final UserRepository userRepository;
 
@@ -51,19 +50,19 @@ class UserSearchBloc extends Bloc<UserSearchEvent, UserSearchState> {
       if (searchTerm.isNotEmpty && searchTerm != "") {
         results = await userRepository.userSearch(searchTerm);
       } else {
-        return state.copyWith(status: LoadStateStatus.empty, items: []);
+        return state.copyWith(status: LoadStateStatus.empty, items: [], searchTerm: "",page: 1,);
       }
       return results.items.isEmpty
-          ? state.copyWith(hasReachedMax: true, status: LoadStateStatus.failed)
+          ? state.copyWith(hasReachedMax: true, status: LoadStateStatus.failed, items: [], page: 1, searchTerm: '')
           : state.copyWith(
               status: LoadStateStatus.success,
-              items: List.of(state.items)..addAll(results.items),
+              items: List.of(state.items!)..addAll(results.items),
               searchTerm: searchTerm,
               hasReachedMax: false,
               page: page,
             );
     } on Exception {
-      return state.copyWith(status: LoadStateStatus.error);
+      return state.copyWith(status: LoadStateStatus.error, page: 1);
     }
   }
 
@@ -73,17 +72,17 @@ class UserSearchBloc extends Bloc<UserSearchEvent, UserSearchState> {
       var page = state.page;
       page++;
       if (state.status == LoadStateStatus.success) {
-        results = await userRepository.userSearch(state.searchTerm, page);
+        results = await userRepository.userSearch(state.searchTerm!, page);
       }
       return state.copyWith(
         status: LoadStateStatus.success,
-        items: List.of(state.items)..addAll(results.items),
+        items: List.of(state.items!)..addAll(results.items),
         hasReachedMax: false,
         page: page,
         searchTerm: state.searchTerm,
       );
     } catch (error) {
-      return state.copyWith(status: LoadStateStatus.error);
+      return state.copyWith(status: LoadStateStatus.error, page: 1);
     }
   }
 
@@ -103,7 +102,7 @@ class UserSearchBloc extends Bloc<UserSearchEvent, UserSearchState> {
       var page = state.page;
       page++;
       if (state.status == LoadStateStatus.success) {
-        results = await userRepository.userSearch(state.searchTerm, page);
+        results = await userRepository.userSearch(state.searchTerm!, page);
       }
       return results.items.isEmpty
           ? state.copyWith(
@@ -120,7 +119,7 @@ class UserSearchBloc extends Bloc<UserSearchEvent, UserSearchState> {
               searchTerm: state.searchTerm,
               hasReachedMax: true);
     } catch (error) {
-      return state.copyWith(status: LoadStateStatus.error);
+      return state.copyWith(status: LoadStateStatus.error, page: 1);
     }
   }
 
@@ -139,7 +138,7 @@ class UserSearchBloc extends Bloc<UserSearchEvent, UserSearchState> {
       }
       if (state.status == LoadStateStatus.success && page > 1) {
         page--;
-        results = await userRepository.userSearch(state.searchTerm, page);
+        results = await userRepository.userSearch(state.searchTerm!, page);
       }
       return results.items.isEmpty
           ? state.copyWith(
@@ -156,7 +155,7 @@ class UserSearchBloc extends Bloc<UserSearchEvent, UserSearchState> {
               searchTerm: state.searchTerm,
               hasReachedMax: true);
     } catch (error) {
-      return state.copyWith(status: LoadStateStatus.error);
+      return state.copyWith(status: LoadStateStatus.error, items: [], page: 1, searchTerm: '');
     }
   }
 }

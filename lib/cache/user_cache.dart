@@ -3,7 +3,7 @@ import '/models/models.dart';
 class UserCache {
   final _cache = <String, Users>{};
 
-  Users get(String term) => _cache[term];
+  Users? get(String term) => _cache[term];
 
   void set(String term, Users result) => _cache[term] = result;
 

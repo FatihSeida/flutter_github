@@ -13,7 +13,7 @@ import '../blocs/user/bloc/user_search_bloc.dart'
 class SearchBar extends StatefulWidget {
   final NavigationState state;
 
-  const SearchBar({this.state});
+  const SearchBar({required this.state});
 
   @override
   State<SearchBar> createState() => _SearchBarState();
@@ -21,9 +21,9 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar> {
   final _textController = TextEditingController();
-  repository.RepositorySearchBloc _repositorySearchBloc;
-  issue.IssueSearchBloc _issueSearchBloc;
-  user.UserSearchBloc _userSearchBloc;
+  late repository.RepositorySearchBloc _repositorySearchBloc;
+  late issue.IssueSearchBloc _issueSearchBloc;
+  late user.UserSearchBloc _userSearchBloc;
 
   void _submit(String text) {
     if (widget.state.searchMode == SearchMode.repository) {

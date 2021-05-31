@@ -1,12 +1,11 @@
 import 'dart:async';
-import 'package:meta/meta.dart';
 
 import '../cache/cache.dart';
 import '../clients/clients.dart';
 import '../models/models.dart';
 
 class RepositoryOfRepository {
-  const RepositoryOfRepository({@required this.cache, @required this.client});
+  const RepositoryOfRepository({required this.cache, required this.client});
 
   final RepositoryCache cache;
   final GithubClient client;

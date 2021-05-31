@@ -8,7 +8,7 @@ abstract class RepositorySearchEvent extends Equatable {
 }
 
 class SearchRepository extends RepositorySearchEvent {
-  const SearchRepository({@required this.text, @required this.page});
+  const SearchRepository({required this.text, required this.page});
 
   final String text;
   final int page;
@@ -21,7 +21,7 @@ class SearchRepository extends RepositorySearchEvent {
 }
 
 class LoadMoreRepository extends RepositorySearchEvent {
-  const LoadMoreRepository({@required this.page});
+  const LoadMoreRepository({required this.page});
 
   final int page;
 

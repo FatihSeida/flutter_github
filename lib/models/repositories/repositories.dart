@@ -6,9 +6,9 @@ part 'repositoryItem.dart';
 
 class Repositories {
   Repositories({
-    this.totalCount,
-    this.incompleteResults,
-    this.items,
+    required this.totalCount,
+    required this.incompleteResults,
+    required this.items,
   });
 
   int totalCount;
@@ -21,22 +21,15 @@ class Repositories {
   String toJson() => json.encode(toMap());
 
   factory Repositories.fromMap(Map<String, dynamic> json) => Repositories(
-        totalCount: json["total_count"] == null ? null : json["total_count"],
-        incompleteResults: json["incomplete_results"] == null
-            ? null
-            : json["incomplete_results"],
-        items: json["items"] == null
-            ? null
-            : List<RepositoryItem>.from(
-                json["items"].map((x) => RepositoryItem.fromMap(x))),
+        totalCount: json["total_count"],
+        incompleteResults: json["incomplete_results"],
+        items: List<RepositoryItem>.from(
+            json["items"].map((x) => RepositoryItem.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
-        "total_count": totalCount == null ? null : totalCount,
-        "incomplete_results":
-            incompleteResults == null ? null : incompleteResults,
-        "items": items == null
-            ? null
-            : List<dynamic>.from(items.map((x) => x.toMap())),
+        "total_count": totalCount,
+        "incomplete_results": incompleteResults,
+        "items": List<dynamic>.from(items.map((x) => x.toMap())),
       };
 }

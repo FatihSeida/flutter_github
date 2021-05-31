@@ -3,14 +3,14 @@ part of 'user_search_body.dart';
 class UserSearchBodyWithIndex extends StatefulWidget {
   final UserSearchState state;
 
-  const UserSearchBodyWithIndex({Key key, this.state}) : super(key: key);
+  const UserSearchBodyWithIndex({required this.state});
   @override
   _UserSearchBodyWithIndexState createState() =>
       _UserSearchBodyWithIndexState();
 }
 
 class _UserSearchBodyWithIndexState extends State<UserSearchBodyWithIndex> {
-  UserSearchBloc _userSearchBloc;
+  late UserSearchBloc _userSearchBloc;
 
   @override
   void initState() {
@@ -30,11 +30,11 @@ class _UserSearchBodyWithIndexState extends State<UserSearchBodyWithIndex> {
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (BuildContext context, int index) {
               return UserSearchResultItem(
-                item: widget.state.items[index],
+                item: widget.state.items![index],
               );
             },
             itemCount:
-                widget.state.items.length < 10 ? widget.state.items.length : 10,
+                widget.state.items!.length < 10 ? widget.state.items!.length : 10,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

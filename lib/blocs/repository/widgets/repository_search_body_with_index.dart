@@ -3,14 +3,14 @@ part of 'repository_search_body.dart';
 class RepositorySearchBodyWithIndex extends StatefulWidget {
   final RepositorySearchState state;
 
-  const RepositorySearchBodyWithIndex({Key key, this.state}) : super(key: key);
+  const RepositorySearchBodyWithIndex({required this.state});
   @override
   _RepositorySearchBodyWithIndexState createState() =>
       _RepositorySearchBodyWithIndexState();
 }
 
 class _RepositorySearchBodyWithIndexState extends State<RepositorySearchBodyWithIndex> {
-  RepositorySearchBloc _repositorySearchBloc;
+  late RepositorySearchBloc _repositorySearchBloc;
 
   @override
   void initState() {
@@ -30,11 +30,11 @@ class _RepositorySearchBodyWithIndexState extends State<RepositorySearchBodyWith
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (BuildContext context, int index) {
               return RepositorySearchResultItem(
-                item: widget.state.items[index],
+                item: widget.state.items![index],
               );
             },
             itemCount:
-                widget.state.items.length < 10 ? widget.state.items.length : 10,
+                widget.state.items!.length < 10 ? widget.state.items!.length : 10,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

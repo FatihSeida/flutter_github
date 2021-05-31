@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -16,7 +15,7 @@ part 'issue_search_result_item.dart';
 class IssueSearchBody extends StatefulWidget {
   final NavigationState state;
 
-  IssueSearchBody({Key key, @required this.state}) : super(key: key);
+  IssueSearchBody({required this.state});
   @override
   _IssueSearchBodyState createState() => _IssueSearchBodyState();
 }
@@ -36,7 +35,7 @@ class _IssueSearchBodyState extends State<IssueSearchBody> {
                 ? IssueSearchBodyLazyLoading(state: state)
                 : IssueSearchBodyWithIndex(state: state);
           default:
-            if (state.items.isEmpty) {
+            if (state.items!.isEmpty) {
               return Text('Please enter term to begin');
             }
             return const Center(child: CircularProgressIndicator());

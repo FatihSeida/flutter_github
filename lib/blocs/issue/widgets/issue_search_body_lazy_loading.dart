@@ -2,7 +2,7 @@ part of 'issue_search_body.dart';
 
 class IssueSearchBodyLazyLoading extends StatefulWidget {
   final IssueSearchState state;
-  IssueSearchBodyLazyLoading({Key key, this.state}) : super(key: key);
+  IssueSearchBodyLazyLoading({required this.state});
 
   @override
   _IssueSearchBodyLazyLoadingState createState() =>
@@ -12,7 +12,7 @@ class IssueSearchBodyLazyLoading extends StatefulWidget {
 class _IssueSearchBodyLazyLoadingState
     extends State<IssueSearchBodyLazyLoading> {
   final _scrollController = ScrollController();
-  IssueSearchBloc _issueSearchBloc;
+  late IssueSearchBloc _issueSearchBloc;
   int _page = 1;
 
   @override
@@ -45,13 +45,13 @@ class _IssueSearchBodyLazyLoadingState
   Widget build(BuildContext context) {
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
-        return index >= widget.state.items.length
+        return index >= widget.state.items!.length
             ? BottomLoader()
-            : IssueSearchResultItem(item: widget.state.items[index]);
+            : IssueSearchResultItem(item: widget.state.items![index]);
       },
-      itemCount: widget.state.hasReachedMax
-          ? widget.state.items.length
-          : widget.state.items.length + 1,
+      itemCount: widget.state.hasReachedMax!
+          ? widget.state.items!.length
+          : widget.state.items!.length + 1,
       controller: _scrollController,
     );
   }

@@ -1,11 +1,9 @@
-import 'package:meta/meta.dart';
-
 import '../cache/cache.dart';
 import '../clients/clients.dart';
 import '../models/models.dart';
 
 class IssueRepository {
-  const IssueRepository({@required this.cache, @required this.client});
+  const IssueRepository({required this.cache, required this.client});
 
   final IssueCache cache;
   final GithubClient client;
